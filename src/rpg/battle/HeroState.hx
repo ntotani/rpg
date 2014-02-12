@@ -1,4 +1,4 @@
-package battle;
+package rpg.battle;
 
 class HeroState {
 

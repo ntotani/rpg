@@ -1,3 +1,5 @@
+package rpg;
+
 import haxe.ds.IntMap;
 
 class Util {

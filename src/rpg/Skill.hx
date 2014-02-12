@@ -1,3 +1,5 @@
+package rpg;
+
 class Skill {
     
     var id      : Int;

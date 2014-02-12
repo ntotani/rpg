@@ -1,3 +1,5 @@
+package rpg;
+
 typedef Parameter = {
     attack : Int,
     block  : Int,

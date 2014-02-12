@@ -1,3 +1,5 @@
+package rpg;
+
 enum Color {
     SUN;
     MOON;

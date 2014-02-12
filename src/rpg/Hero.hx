@@ -1,9 +1,5 @@
-import Color;
-import Plan;
-import Parameter;
-import Skill;
+package rpg;
 
-@:expose('Hero')
 class Hero {
 
     public static var MAX_TALENT : Int = 15;

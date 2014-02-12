@@ -1,4 +1,4 @@
-package;
+package rpg;
 
 import massive.munit.Assert;
 

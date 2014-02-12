@@ -1,9 +1,8 @@
-package battle;
+package rpg.battle;
 
 import haxe.ds.IntMap;
-import battle.Result;
+import rpg.battle.Result;
 
-@:expose('battle.Engine')
 class Engine {
 
     var heros : IntMap<HeroState>;

@@ -1,7 +1,7 @@
-package battle;
+package rpg.battle;
 
 import massive.munit.Assert;
-import battle.Result;
+import rpg.battle.Result;
 
 class EngineTest {
 

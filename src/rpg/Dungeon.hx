@@ -1,5 +1,7 @@
-import battle.*;
-import battle.Result;
+package rpg;
+
+import rpg.battle.*;
+import rpg.battle.Result;
 
 class Dungeon {
 
