@@ -24,7 +24,8 @@ class Engine {
             id++;
         }
         this.result = {
-            heros:Util.copy(this.heros),
+            teamRed: Util.copy(teamRed),
+            teamBlue: Util.copy(teamBlue),
             turns:[],
         };
     }

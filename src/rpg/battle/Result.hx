@@ -3,7 +3,8 @@ package rpg.battle;
 import haxe.ds.IntMap;
 
 typedef BattleResult = {
-    heros : IntMap<BattleHero>,
+    teamRed: Array<Hero>,
+    teamBlue: Array<Hero>,
     turns : Array<Turn>,
 }
 

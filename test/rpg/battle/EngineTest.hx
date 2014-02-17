@@ -9,7 +9,7 @@ class EngineTest {
     public function testInitHeros():Void {
         var engine:Engine = this.createEngine();
         var result:BattleResult = engine.getResult();
-        Assert.areEqual(0, result.heros.get(0).getId());
+        Assert.areEqual('0', result.teamRed[0].getId());
     }
 
     @Test
