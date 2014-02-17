@@ -2,7 +2,6 @@ package rpg;
 
 typedef Skill = {
     id      : Int,
-    name    : String,
     color   : Color,
     type    : SkillType,
     effect  : SkillEffect,

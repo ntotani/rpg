@@ -110,7 +110,6 @@ class HeroTest {
         var id:String = Std.string(heroId++);
         var skills:Array<Skill> = [{
             id:0,
-            name:'skill0',
             color:Color.SUN,
             type:Skill.SkillType.ATTACK,
             target:Skill.SkillTarget.ENEMY,
@@ -118,7 +117,7 @@ class HeroTest {
             power:100,
             hitRate:100
         }];
-        return new Hero(id, id, Color.SUN, Plan.MONKEY, talent, effort, 1, Date.now(), skills);
+        return new Hero(id, Color.SUN, Plan.MONKEY, talent, effort, 1, skills);
     }
 
 }

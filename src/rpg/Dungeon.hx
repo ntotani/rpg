@@ -49,7 +49,6 @@ class Dungeon {
         var zero:Parameter = {attack:0, block:0, speed:0, health:0};
         var skills:Array<Skill> = [{
             id:0,
-            name:'skill0',
             color:Color.SUN,
             type:Skill.SkillType.ATTACK,
             target:Skill.SkillTarget.ENEMY,
@@ -57,7 +56,7 @@ class Dungeon {
             power:100,
             hitRate:100
         }];
-        return [new Hero(id, id, Color.SUN, Plan.MONKEY, one, zero, 1, Date.now(), skills)];
+        return [new Hero(id, Color.SUN, Plan.MONKEY, one, zero, 1, skills)];
     }
 
 }
