@@ -4,6 +4,7 @@ import massive.munit.Assert;
 
 class DungeonTest {
 
+    /*
     @Test
     public function testSolveAuto():Void {
         var dungeon:Dungeon = new Dungeon();
@@ -12,5 +13,6 @@ class DungeonTest {
         Assert.areEqual(0, result.exp.attack);
         Assert.areEqual(92, hero.getHp());
     }
+    */
 
 }

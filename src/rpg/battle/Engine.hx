@@ -102,17 +102,17 @@ class Engine {
         };
         switch(skill.type) {
             case ATTACK:
-                result.effect = this.calcDamage(actor, target);
+                result.effect = calcDamage(actor, target, skill);
                 target.damage(result.effect);
             default:
         }
         return result;
     }
 
-    public function calcDamage(actor:BattleHero, target:BattleHero):Int {
+    public static function calcDamage(actor:BattleHero, target:BattleHero, skill:Skill):Int {
         var attack:Int = actor.getHero().getParameter().attack;
         var block:Int = target.getHero().getParameter().block;
-        return Std.int(Math.max(1, attack - block));
+        return Std.int(skill.power * actor.getHero().getLevel() / 10 * attack / block + 1);
     }
     
     public function isFinish():Bool {

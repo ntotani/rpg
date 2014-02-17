@@ -128,7 +128,7 @@ class HeroTest {
             type:Skill.SkillType.ATTACK,
             target:Skill.SkillTarget.ENEMY,
             effect:Skill.SkillEffect.ATTACK,
-            power:100,
+            power:40,
             hitRate:100
         }];
         return new Hero(id, Color.SUN, Plan.MONKEY, talent, effort, 1, skills);
