@@ -8,7 +8,8 @@ class EngineTest {
     @Test
     public function testInitHeros():Void {
         var engine:Engine = this.createEngine();
-        engine.action({actor:1, target:0, skill:0});
+        engine.applyNewTurn();
+        engine.applyAction({actor:1, target:0, skill:0, effect:1});
         var result:BattleResult = engine.getResult();
         Assert.isTrue(result.teamRed[0].getHp() > engine.getHero(0).getHp());
     }
@@ -59,7 +60,6 @@ class EngineTest {
         Assert.isTrue(engine.isFinish());
     }
 
-    /*
     @Test
     public function testExecute():Void {
         var engine:Engine = this.createEngine();
@@ -73,12 +73,29 @@ class EngineTest {
         engine.execute(friendRequest);
         engine.execute(new RequestImpl([{actor:1, target:0, skill:0}]));
     }
-    */
 
     @Test
     public function testExecuteRepeat():Void {
         var engine:Engine = this.createEngine();
         var req:RequestRepeat = new RequestRepeat([], engine);
+        req.next();
+    }
+
+    @Test
+    public function testRecordAndPlay():Void {
+        var engine1:Engine = this.createEngine();
+        var req:RequestRepeat = new RequestRepeat([], engine1);
+        req.next();
+        var result1:BattleResult = engine1.getResult();
+        var engine2:Engine = new Engine(result1.teamRed, result1.teamBlue);
+        for (turn in result1.turns) {
+            engine2.applyNewTurn();
+            for (act in turn) {
+                engine2.applyAction(act);
+            }
+        }
+        var result2:BattleResult = engine2.getResult();
+        Assert.areEqual(Std.string(result1), Std.string(result2));
     }
 
     function createEngine():Engine {
@@ -107,9 +124,9 @@ class RequestImpl implements Engine.Request {
 }
 
 class RequestEqual extends RequestImpl {
-    
+
     var turn:Turn;
-    
+
     public function new(commands:Array<Engine.Command>, turn:Turn) {
         super(commands);
         this.turn = turn;
@@ -117,9 +134,10 @@ class RequestEqual extends RequestImpl {
 
     public override function callback(turn:Turn, finish:Bool):Void {
         //Assert.areEqual(Std.string(this.result), Std.string(res));
-        Assert.areEqual(this.turn[0].effect, turn[0].effect);
+        Assert.areEqual(0, turn[0].actor);
+        Assert.areEqual(1, turn[1].actor);
     }
-    
+
 }
 
 class RequestRepeat extends RequestImpl {

@@ -64,12 +64,11 @@ class Engine {
                 }
             }
             var events:Array<Action> = [];
-            var turn:Turn = [];
+            var turn:Turn = this.applyNewTurn();
             for (id in this.solveOrder(this.requests)) {
                 var event:Action = this.action(commands.get(id));
-                turn.push(event);
+                this.applyAction(event);
             }
-            this.result.turns.push(turn);
             for (e in this.requests) {
                 e.callback(turn, this.isFinish());
             }
@@ -103,10 +102,28 @@ class Engine {
         switch(skill.type) {
             case ATTACK:
                 result.effect = calcDamage(actor, target, skill);
-                target.damage(result.effect);
             default:
         }
         return result;
+    }
+
+    public function applyNewTurn():Turn {
+        var turn:Turn = [];
+        this.result.turns.push(turn);
+        return turn;
+    }
+
+    public function applyAction(act:Action):Void {
+        var actor:BattleHero = this.heros.get(act.actor);
+        var target:BattleHero = this.heros.get(act.target);
+        var skill:Skill = actor.getHero().getSkill(act.skill);
+        switch(skill.type) {
+            case ATTACK:
+                target.damage(act.effect);
+            default:
+        }
+        var turn:Turn = this.result.turns[this.result.turns.length - 1];
+        turn.push(act);
     }
 
     public static function calcDamage(actor:BattleHero, target:BattleHero, skill:Skill):Int {
