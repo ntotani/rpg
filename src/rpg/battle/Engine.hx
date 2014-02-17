@@ -99,10 +99,11 @@ class Engine {
             skill:cmd.skill,
             effect:0,
         };
-        switch(skill.getEffect()) {
+        switch(skill.type) {
             case ATTACK:
                 result.effect = this.calcDamage(actor, target);
                 target.damage(result.effect);
+            default:
         }
         return result;
     }

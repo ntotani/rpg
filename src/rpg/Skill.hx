@@ -1,31 +1,17 @@
 package rpg;
 
-class Skill {
-    
-    var id      : Int;
-    var name    : String;
-    var color   : Color;
-    var target  : Target;
-    // ↓ここをリスト化。。。？
-    var power   : Int;
-    var hitRate : Int;
-    var effect  : Effect;
-    
-    public function new() {
-        this.id = 0;
-        this.name = '';
-        this.color = Color.SUN;
-        this.power = 100;
-        this.hitRate = 100;
-        this.target = Target.ENEMY;
-        this.effect = Effect.ATTACK;
-    }
-    
-    public function getEffect():Effect { return this.effect; }
-
+typedef Skill = {
+    id      : Int,
+    name    : String,
+    color   : Color,
+    type    : SkillType,
+    effect  : SkillEffect,
+    target  : SkillTarget,
+    power   : Int,
+    hitRate : Int,
 }
 
-enum Target {
+enum SkillTarget {
     ENEMY;
     /*
     ENEMY_ALL;
@@ -36,6 +22,14 @@ enum Target {
     */
 }
 
-enum Effect {
+enum SkillType {
+    ATTACK;
+    BLOCK;
+    ENHANCE;
+    JAM;
+    HEAL;
+}
+
+enum SkillEffect {
     ATTACK;
 }

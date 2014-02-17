@@ -23,7 +23,16 @@ class Hero {
         this.effort = {attack:0, block:0, speed:0, health:0};
         this.hp = 100;
         this.returnAt = Date.now();
-        this.skills = [new Skill()];
+        this.skills = [{
+            id:0,
+            name:'',
+            color:Color.SUN,
+            type:Skill.SkillType.ATTACK,
+            target:Skill.SkillTarget.ENEMY,
+            effect:Skill.SkillEffect.ATTACK,
+            power:100,
+            hitRate:100
+        }];
     }
 
     public static function create(id:String, talent:Parameter, effort:Parameter):Hero {
