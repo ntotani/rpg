@@ -53,21 +53,30 @@ class Hero {
     public function getSkill(idx:Int):Skill { return this.skills[idx]; }
 
     public function getParameter():Parameter {
+        var level:Int = getLevel();
         return {
-            attack : calcParameter(this.talent.attack, this.effort.attack),
-            block  : calcParameter(this.talent.block , this.effort.block) ,
-            speed  : calcParameter(this.talent.speed , this.effort.speed) ,
-            health : calcHealthParameter(this.talent.health, this.effort),
+            attack : calcParameter(this.talent.attack, this.effort.attack, level),
+            block  : calcParameter(this.talent.block , this.effort.block, level) ,
+            speed  : calcParameter(this.talent.speed , this.effort.speed, level) ,
+            health : calcHealthParameter(this.talent.health, this.effort.health, level),
         }
     }
 
-    public static function calcParameter(talent:Int, effort:Int):Int {
-        return talent + Std.int(effort / 4);
+    public function getLevel():Int {
+        return calcLevel(this.effort);
     }
 
-    public static function calcHealthParameter(talent:Int, effort:Parameter):Int {
-        var sum:Int = Std.int((effort.attack + effort.block + effort.speed + effort.health) / 4);
-        return Hero.calcParameter(talent, effort.health) + sum;
+    public static function calcParameter(talent:Int, effort:Int, level:Int):Int {
+        return Std.int((60 + talent + effort / 4) * level / 10);
+    }
+
+    public static function calcHealthParameter(talent:Int, effort:Int, level:Int):Int {
+        return Hero.calcParameter(talent, effort, level) + level * 5;
+    }
+
+    public static function calcLevel(effort:Parameter):Int {
+        var sum:Int = effort.attack + effort.block + effort.speed + effort.health;
+        return Std.int(Math.sqrt(sum) * 9 / 16) + 1;
     }
 
 }

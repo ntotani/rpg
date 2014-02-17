@@ -65,17 +65,31 @@ class HeroTest {
     }
 
     @Test
+    public function testCalcLevel():Void {
+        var maxEffort = {attack:Hero.EFFORT_LIMIT, block:Hero.EFFORT_LIMIT, speed:0, health:0};
+        var level:Int = Hero.calcLevel(maxEffort);
+        Assert.areEqual(10, level);
+    }
+
+    @Test
     public function testCalcParameter():Void {
-        var hight:Int = Hero.calcParameter(Hero.MAX_TALENT, 0);
-        var low:Int = Hero.calcParameter(1, 0);
+        var hight:Int = Hero.calcParameter(Hero.MAX_TALENT, 0, 1);
+        var low:Int = Hero.calcParameter(1, 0, 1);
         Assert.isTrue(hight > low);
     }
-    
+
+    @Test
+    public function testCalcHealthParameter():Void {
+        var hight:Int = Hero.calcHealthParameter(1, Hero.EFFORT_LIMIT, 1);
+        var low:Int = Hero.calcHealthParameter(1, 0, 1);
+        Assert.isTrue(hight > low);
+    }
+
     @Test
     public function testGetParameterZero():Void {
         var hero:Hero = createMinHero();
         var actual:Parameter = hero.getParameter();
-        Assert.areEqual(1, actual.attack);
+        Assert.isTrue(actual.attack > 0);
     }
     
     @Test
