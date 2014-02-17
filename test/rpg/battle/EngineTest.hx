@@ -73,7 +73,7 @@ class EngineTest {
 
     function createEngine():Engine {
         var red:Hero = HeroTest.createMaxHero();
-        var blue:Hero = HeroTest.createZeroHero();
+        var blue:Hero = HeroTest.createMinHero();
         return new Engine([red], [blue]);
     }
 

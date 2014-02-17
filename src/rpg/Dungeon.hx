@@ -44,8 +44,20 @@ class Dungeon {
     }
     
     public function spawnEnemies():Array<Hero> {
+        var id:String = 'enemy';
+        var one = {attack:1, block:1, speed:1, health:1};
         var zero:Parameter = {attack:0, block:0, speed:0, health:0};
-        return [Hero.create('hoge', zero, zero)];
+        var skills:Array<Skill> = [{
+            id:0,
+            name:'skill0',
+            color:Color.SUN,
+            type:Skill.SkillType.ATTACK,
+            target:Skill.SkillTarget.ENEMY,
+            effect:Skill.SkillEffect.ATTACK,
+            power:100,
+            hitRate:100
+        }];
+        return [new Hero(id, id, Color.SUN, Plan.MONKEY, one, zero, 1, Date.now(), skills)];
     }
 
 }
