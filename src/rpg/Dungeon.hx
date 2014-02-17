@@ -78,8 +78,8 @@ class MonkeyAI implements Engine.Request {
     }
 
     public function getCommands():Iterable<Engine.Command> {
-        var friends:List<HeroState> = this.engine.getFriends(this.friendTeam);
-        var enemies:List<HeroState> = this.engine.getEnemies(this.friendTeam);
+        var friends:List<BattleHero> = this.engine.getFriends(this.friendTeam);
+        var enemies:List<BattleHero> = this.engine.getEnemies(this.friendTeam);
         return Lambda.map(friends, function(friend) {
             var target:Int = Lambda.fold(enemies, function(e, p) {
                 return e.getHp() > 0 ? e.getId() : p;

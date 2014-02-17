@@ -1,9 +1,9 @@
 package rpg.battle;
 
-class HeroState {
+class BattleHero {
 
     var id : Int;
-    var team : Int;
+    var team: Int;
     var hero : Hero;
     var hp : Int;
     var correction : Parameter;

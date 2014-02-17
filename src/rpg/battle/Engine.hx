@@ -5,22 +5,22 @@ import rpg.battle.Result;
 
 class Engine {
 
-    var heros : IntMap<HeroState>;
+    var heros : IntMap<BattleHero>;
     var requests : Array<Request>;
     var result : BattleResult;
 
     public function new(teamRed:Array<Hero>, teamBlue:Array<Hero>) {
-        this.heros = new IntMap<HeroState>();
+        this.heros = new IntMap<BattleHero>();
         this.requests = [];
         var id:Int = 0;
         var team:Int = 0;
         for (hero in teamRed) {
-            this.heros.set(id, new HeroState(id, team, hero)); 
+            this.heros.set(id, new BattleHero(id, team, hero)); 
             id++;
         }
         team++;
         for (hero in teamBlue) {
-            this.heros.set(id, new HeroState(id, team, hero));
+            this.heros.set(id, new BattleHero(id, team, hero));
             id++;
         }
         this.result = {
@@ -29,22 +29,22 @@ class Engine {
         };
     }
 
-    public function getHero(id:Int):HeroState {
+    public function getHero(id:Int):BattleHero {
         return this.heros.get(id);
     }
     
-    public function getHeros():Iterator<HeroState> {
+    public function getHeros():Iterator<BattleHero> {
         return this.heros.iterator();
     }
     
-    public function getFriends(team:Int):List<HeroState> {
-        return Lambda.filter(this.heros, function(e:HeroState) {
+    public function getFriends(team:Int):List<BattleHero> {
+        return Lambda.filter(this.heros, function(e:BattleHero) {
             return e.getTeam() == team;
         });
     }
     
-    public function getEnemies(team:Int):List<HeroState> {
-        return Lambda.filter(this.heros, function(e:HeroState) {
+    public function getEnemies(team:Int):List<BattleHero> {
+        return Lambda.filter(this.heros, function(e:BattleHero) {
             return e.getTeam() != team;
         });
     }
@@ -77,7 +77,7 @@ class Engine {
     }
 
     public function solveOrder(requests:Array<Request>):Array<Int> {
-        var allHeros:Array<HeroState> = [];
+        var allHeros:Array<BattleHero> = [];
         for (e in this.heros) { allHeros.push(e); }
         allHeros.sort(function(a, b) {
             var aSpeed:Int = a.getHero().getParameter().speed;
@@ -90,8 +90,8 @@ class Engine {
     }
 
     public function action(cmd:Command):Action {
-        var actor:HeroState = this.heros.get(cmd.actor);
-        var target:HeroState = this.heros.get(cmd.target);
+        var actor:BattleHero = this.heros.get(cmd.actor);
+        var target:BattleHero = this.heros.get(cmd.target);
         var skill:Skill = actor.getHero().getSkill(cmd.skill);
         var result:Action = {
             actor:cmd.actor,
@@ -108,7 +108,7 @@ class Engine {
         return result;
     }
 
-    public function calcDamage(actor:HeroState, target:HeroState):Int {
+    public function calcDamage(actor:BattleHero, target:BattleHero):Int {
         var attack:Int = actor.getHero().getParameter().attack;
         var block:Int = target.getHero().getParameter().block;
         return Std.int(Math.max(1, attack - block));
