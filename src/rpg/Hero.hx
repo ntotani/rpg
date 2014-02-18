@@ -94,7 +94,7 @@ class Hero {
         }
     }
 
-    public function applyEffort(effort:Parameter) {
+    public function applyExp(effort:Parameter) {
         this.effort.attack += trimEffort(this.effort.attack, effort.attack);
         this.effort.block += trimEffort(this.effort.block, effort.block);
         this.effort.speed += trimEffort(this.effort.speed, effort.speed);
@@ -105,6 +105,25 @@ class Hero {
         var ret = Std.int(Math.min(EFFORT_LIMIT - base, gain));
         var sum = effort.attack + effort.block + effort.speed + effort.health;
         return Std.int(Math.min(EFFORT_SUM_LIMIT - sum, ret));
+    }
+
+    public function calcExp():Parameter {
+        var exp = {attack:0, block:0, speed:0, health:0};
+        var val = this.getLevel();
+        switch(this.color) {
+            case FIRE:
+            case WATER:
+            case TREE:
+                exp.attack = val;
+            case EARTH:
+                exp.block = val;
+            case MOON:
+            case GOLD:
+                exp.speed = val;
+            case SUN:
+                exp.health = val;
+        }
+        return exp;
     }
 
 }

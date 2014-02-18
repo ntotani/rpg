@@ -115,14 +115,21 @@ class HeroTest {
     @Test
     public function testApplyEffort() {
         var hero = createMinHero();
-        hero.applyEffort({attack:1, block:0, speed:0, health:0});
+        hero.applyExp({attack:1, block:0, speed:0, health:0});
         Assert.areEqual(1, hero.getEffort().attack);
-        hero.applyEffort({attack:1000, block:0, speed:0, health:0});
+        hero.applyExp({attack:1000, block:0, speed:0, health:0});
         Assert.areEqual(Hero.EFFORT_LIMIT, hero.getEffort().attack);
-        hero.applyEffort({attack:0, block:1000, speed:0, health:0});
+        hero.applyExp({attack:0, block:1000, speed:0, health:0});
         Assert.areEqual(Hero.EFFORT_LIMIT, hero.getEffort().block);
-        hero.applyEffort({attack:0, block:0, speed:1, health:0});
+        hero.applyExp({attack:0, block:0, speed:1, health:0});
         Assert.areEqual(0, hero.getEffort().speed);
+    }
+
+    @Test
+    public function testCalcExp() {
+        var hero = createMinHero();
+        var expected = {attack:0, block:0, speed:0, health:1};
+        Assert.areEqual(Std.string(expected), Std.string(hero.calcExp()));
     }
 
     public static function createMinHero():Hero {

@@ -17,7 +17,6 @@ class Dungeon {
 
     public function solveAuto(heros:Array<Hero>):DungeonResult {
         var result:DungeonResult = {
-            exp: {attack:0, block:0, speed:0, health:0},
             battles: [],
         };
         var id2hero = new Map<String, Hero>();
@@ -63,7 +62,6 @@ class Dungeon {
 }
 
 typedef DungeonResult = {
-    exp:Parameter,
     battles:Array<BattleResult>,
 }
 
