@@ -52,6 +52,7 @@ class Hero {
     public function setHp(hp:Int):Void { this.hp = hp; }
     public function getSkill(idx:Int):Skill { return this.skills[idx]; }
     public function getSkillNum() { return this.skills.length; }
+    public function getEffort() { return this.effort; };
 
     public function getParameter():Parameter {
         var level:Int = getLevel();
@@ -83,7 +84,7 @@ class Hero {
     public function recoverAllHp():Void {
         this.hp = this.getParameter().health;
     }
-    
+
     public static function generateTalent():Parameter {
         return {
             attack : (Rand.next() % MAX_TALENT) + 1,
@@ -91,6 +92,19 @@ class Hero {
             speed  : (Rand.next() % MAX_TALENT) + 1,
             health : (Rand.next() % MAX_TALENT) + 1,
         }
+    }
+
+    public function applyEffort(effort:Parameter) {
+        this.effort.attack += trimEffort(this.effort.attack, effort.attack);
+        this.effort.block += trimEffort(this.effort.block, effort.block);
+        this.effort.speed += trimEffort(this.effort.speed, effort.speed);
+        this.effort.health += trimEffort(this.effort.health, effort.health);
+    }
+
+    function trimEffort(base:Int, gain:Int):Int {
+        var ret = Std.int(Math.min(EFFORT_LIMIT - base, gain));
+        var sum = effort.attack + effort.block + effort.speed + effort.health;
+        return Std.int(Math.min(EFFORT_SUM_LIMIT - sum, ret));
     }
 
 }

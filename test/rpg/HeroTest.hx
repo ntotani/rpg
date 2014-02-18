@@ -91,7 +91,7 @@ class HeroTest {
         var actual:Parameter = hero.getParameter();
         Assert.isTrue(actual.attack > 0);
     }
-    
+
     @Test
     public function testGetParameterMax():Void {
         var maxHero:Hero = createMaxHero();
@@ -100,7 +100,7 @@ class HeroTest {
         var zeroPrm:Parameter = zeroHero.getParameter();
         Assert.isTrue(maxPrm.attack > zeroPrm.attack);
     }
-    
+
     @Test
     public function testGenerateTalen() {
         Rand.startDebug([0, 1, 15, 16]);
@@ -110,6 +110,19 @@ class HeroTest {
         Assert.areEqual(16, talent.speed);
         Assert.areEqual(1, talent.health);
         Rand.endDebug();
+    }
+
+    @Test
+    public function testApplyEffort() {
+        var hero = createMinHero();
+        hero.applyEffort({attack:1, block:0, speed:0, health:0});
+        Assert.areEqual(1, hero.getEffort().attack);
+        hero.applyEffort({attack:1000, block:0, speed:0, health:0});
+        Assert.areEqual(Hero.EFFORT_LIMIT, hero.getEffort().attack);
+        hero.applyEffort({attack:0, block:1000, speed:0, health:0});
+        Assert.areEqual(Hero.EFFORT_LIMIT, hero.getEffort().block);
+        hero.applyEffort({attack:0, block:0, speed:1, health:0});
+        Assert.areEqual(0, hero.getEffort().speed);
     }
 
     public static function createMinHero():Hero {
