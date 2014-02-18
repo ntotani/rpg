@@ -25,5 +25,9 @@ class BattleHero {
         this.hp -= value;
         this.hp = if(this.hp < 0) 0 else this.hp;
     }
+    
+    public function alive():Bool {
+        return this.hp > 0;
+    }
 
 }

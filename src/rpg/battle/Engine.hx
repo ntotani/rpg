@@ -102,7 +102,7 @@ class Engine {
         };
         switch(skill.type) {
             case ATTACK:
-                result.effect = calcDamage(actor, target, skill);
+                result.effect = actor.alive() && target.alive() && actor.getTeam() != target.getTeam() ? calcDamage(actor, target, skill) : 0;
             default:
         }
         return result;
@@ -134,16 +134,16 @@ class Engine {
     }
     
     public function isFinish():Bool {
-        var redHp:Int = 0;
-        var blueHp:Int = 0;
-        for (e in this.heros) {
-            if (e.getTeam() == 0) {
-                redHp += e.getHp();
-            } else {
-                blueHp += e.getHp();
+        return isWin(0) || isWin(1);
+    }
+    
+    public function isWin(team):Bool {
+        return Lambda.fold(this.heros, function(e, p) {
+            if (e.getTeam() == team) {
+                return p;
             }
-        }
-        return redHp <= 0 || blueHp <= 0;
+            return p + e.getHp();
+        }, 0) <= 0;
     }
 
 }

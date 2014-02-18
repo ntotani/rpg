@@ -19,27 +19,28 @@ class Dungeon {
         var result:DungeonResult = {
             exp: {attack:0, block:0, speed:0, health:0},
             battles: [],
-            depth:0,
         };
         var id2hero = new Map<String, Hero>();
         for (e in heros) { id2hero.set(e.getId(), e); }
         for (i in 0...depth) {
-            var enemies:Array<Hero> = this.spawnEnemies();
-            var engine:Engine = new Engine(heros, enemies);
-            var friendAgent:MonkeyAI = new MonkeyAI(engine, 0);
-            var enemyAgent:MonkeyAI = new MonkeyAI(engine, 1);
+            var enemies = this.spawnEnemies();
+            var engine = new Engine(heros, enemies);
+            var friendAgent = new MonkeyAI(engine, 0);
+            var enemyAgent = new MonkeyAI(engine, 1);
             while (!engine.isFinish()) {
                 engine.execute(friendAgent);
                 engine.execute(enemyAgent);
             }
             for (e in engine.getHeros()) {
-                var id:String = e.getHero().getId();
+                var id = e.getHero().getId();
                 if (id2hero.exists(id)) {
                     id2hero.get(id).setHp(e.getHp());
                 }
             }
-            // check
             result.battles.push(engine.getResult());
+            if (!engine.isWin(0)) {
+                break;
+            }
         }
         return result;
     }
@@ -64,7 +65,6 @@ class Dungeon {
 typedef DungeonResult = {
     exp:Parameter,
     battles:Array<BattleResult>,
-    depth:Int,
 }
 
 typedef DungeonEnemy = {
@@ -90,13 +90,14 @@ class MonkeyAI implements Engine.Request {
     }
 
     public function getCommands():Iterable<Engine.Command> {
-        var friends:List<BattleHero> = this.engine.getFriends(this.friendTeam);
-        var enemies:List<BattleHero> = this.engine.getEnemies(this.friendTeam);
+        var friends = Lambda.filter(this.engine.getFriends(this.friendTeam), function(e) { return e.alive(); });
+        var enemies = Lambda.array(Lambda.filter(this.engine.getEnemies(this.friendTeam), function(e) { return e.alive(); }));
         return Lambda.map(friends, function(friend) {
-            var target:Int = Lambda.fold(enemies, function(e, p) {
-                return e.getHp() > 0 ? e.getId() : p;
-            }, 0);
-            return {actor:friend.getId(), target:target, skill:0};
+            return {
+                actor:friend.getId(),
+               target:enemies[Rand.next() % enemies.length].getId(),
+               skill:Rand.next() % friend.getHero().getSkillNum(),
+            };
         });
     }
 

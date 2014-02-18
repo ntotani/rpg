@@ -52,11 +52,31 @@ class EngineTest {
         var maxHp:Int = engine.getHero(0).getHero().getParameter().health;
         Assert.isTrue(currentHp == maxHp);
     }
-    
+
+    @Test
+    public function testActionDeadActor():Void {
+        var engine:Engine = this.createEngine();
+        engine.getHero(0).damage(1000);
+        var cmd:Engine.Command = {actor:0, target:1, skill:0}
+        var act:Action = engine.action(cmd);
+        Assert.areEqual(0, act.effect);
+    }
+
+    @Test
+    public function testActionDeadTarget():Void {
+        var engine:Engine = this.createEngine();
+        engine.getHero(1).damage(1000);
+        var cmd:Engine.Command = {actor:0, target:1, skill:0}
+        var act:Action = engine.action(cmd);
+        Assert.areEqual(0, act.effect);
+    }
+
     @Test
     public function testIsFinish():Void {
         var engine:Engine = this.createEngine();
-        engine.getHero(0).damage(1000);
+        Assert.isFalse(engine.isFinish());
+        engine.getHero(1).damage(1000);
+        Assert.isTrue(engine.isWin(0));
         Assert.isTrue(engine.isFinish());
     }
 

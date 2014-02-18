@@ -51,6 +51,7 @@ class Hero {
     public function getHp():Int { return this.hp; }
     public function setHp(hp:Int):Void { this.hp = hp; }
     public function getSkill(idx:Int):Skill { return this.skills[idx]; }
+    public function getSkillNum() { return this.skills.length; }
 
     public function getParameter():Parameter {
         var level:Int = getLevel();
