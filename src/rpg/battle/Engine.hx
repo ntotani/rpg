@@ -69,10 +69,11 @@ class Engine {
                 var event:Action = this.action(commands.get(id));
                 this.applyAction(event);
             }
-            for (e in this.requests) {
+            var requests:Array<Request> = this.requests;
+            this.requests = [];
+            for (e in requests) {
                 e.callback(turn, this.isFinish());
             }
-            this.requests = [];
         }
     }
 

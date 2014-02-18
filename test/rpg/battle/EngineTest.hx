@@ -39,7 +39,7 @@ class EngineTest {
         Assert.isTrue(act.effect > 0);
         var currentHp:Int = engine.getHero(1).getHp();
         var maxHp:Int = engine.getHero(1).getHero().getParameter().health;
-        Assert.isTrue(currentHp < maxHp);
+        Assert.isTrue(currentHp == maxHp);
     }
     
     @Test
@@ -50,7 +50,7 @@ class EngineTest {
         Assert.isTrue(act.effect > 0);
         var currentHp:Int = engine.getHero(0).getHp();
         var maxHp:Int = engine.getHero(0).getHero().getParameter().health;
-        Assert.isTrue(currentHp < maxHp);
+        Assert.isTrue(currentHp == maxHp);
     }
     
     @Test
@@ -72,6 +72,8 @@ class EngineTest {
         var friendRequest:RequestEqual = new RequestEqual([{actor:0, target:1, skill:0}], expected);
         engine.execute(friendRequest);
         engine.execute(new RequestImpl([{actor:1, target:0, skill:0}]));
+        Assert.isTrue(engine.getHero(0).getHp() < engine.getHero(0).getHero().getParameter().health);
+        Assert.isTrue(engine.getHero(1).getHp() < engine.getHero(1).getHero().getParameter().health);
     }
 
     @Test

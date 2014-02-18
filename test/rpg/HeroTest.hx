@@ -100,6 +100,17 @@ class HeroTest {
         var zeroPrm:Parameter = zeroHero.getParameter();
         Assert.isTrue(maxPrm.attack > zeroPrm.attack);
     }
+    
+    @Test
+    public function testGenerateTalen() {
+        Rand.startDebug([0, 1, 15, 16]);
+        var talent = Hero.generateTalent();
+        Assert.areEqual(1, talent.attack);
+        Assert.areEqual(2, talent.block);
+        Assert.areEqual(16, talent.speed);
+        Assert.areEqual(1, talent.health);
+        Rand.endDebug();
+    }
 
     public static function createMinHero():Hero {
         var paramZero = {attack:0, block:0, speed:0, health:0};
@@ -122,7 +133,12 @@ class HeroTest {
 
     public static function createHero(talent:Parameter, effort:Parameter):Hero {
         var id:String = Std.string(heroId++);
-        var skills:Array<Skill> = [{
+        var skills:Array<Skill> = [createSkill()];
+        return new Hero(id, Color.SUN, Plan.MONKEY, talent, effort, skills);
+    }
+    
+    public static function createSkill():Skill {
+        return {
             id:0,
             color:Color.SUN,
             type:Skill.SkillType.ATTACK,
@@ -130,8 +146,7 @@ class HeroTest {
             effect:Skill.SkillEffect.ATTACK,
             power:40,
             hitRate:100
-        }];
-        return new Hero(id, Color.SUN, Plan.MONKEY, talent, effort, 1, skills);
+        };
     }
 
 }

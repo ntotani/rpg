@@ -5,22 +5,23 @@ import rpg.battle.Result;
 
 class Dungeon {
 
-    var name : String;
-    var depth : Int;
-    // env (weather, ground...)
+    var depth        : Int;
+    var lotteryTable : Array<DungeonLot>;
+    var boss         : Array<DungeonEnemy>;
 
-    public function new() {
-        this.name = '';
-        this.depth = 1;
+    public function new(depth, lotteryTable, boss) {
+        this.depth = depth;
+        this.lotteryTable = lotteryTable;
+        this.boss = boss;
     }
 
-    public function solveAuto(heros:Array<Hero>):Result {
-        var result:Result = {
+    public function solveAuto(heros:Array<Hero>):DungeonResult {
+        var result:DungeonResult = {
             exp: {attack:0, block:0, speed:0, health:0},
             battles: [],
             depth:0,
         };
-        var id2hero:Map<String, Hero> = new Map<String, Hero>();
+        var id2hero = new Map<String, Hero>();
         for (e in heros) { id2hero.set(e.getId(), e); }
         for (i in 0...depth) {
             var enemies:Array<Hero> = this.spawnEnemies();
@@ -42,29 +43,40 @@ class Dungeon {
         }
         return result;
     }
-    
+
     public function spawnEnemies():Array<Hero> {
-        var id:String = 'enemy';
-        var one = {attack:1, block:1, speed:1, health:1};
-        var zero:Parameter = {attack:0, block:0, speed:0, health:0};
-        var skills:Array<Skill> = [{
-            id:0,
-            color:Color.SUN,
-            type:Skill.SkillType.ATTACK,
-            target:Skill.SkillTarget.ENEMY,
-            effect:Skill.SkillEffect.ATTACK,
-            power:100,
-            hitRate:100
-        }];
-        return [new Hero(id, Color.SUN, Plan.MONKEY, one, zero, 1, skills)];
+        var rateSum = Lambda.fold(this.lotteryTable, function(e, p) {
+            return p + e.rate;
+        }, 0);
+        var pivot = Rand.next() % rateSum;
+        for (lot in this.lotteryTable) {
+            if (lot.rate > pivot) {
+                return Lambda.array(Lambda.mapi(lot.enemies, function(i, e) {
+                    return new Hero('enemy' + i, e.color, e.plan, Hero.generateTalent(), e.effort, e.skills);
+                }));
+            }
+        }
+        throw 'invalid table';
     }
 
 }
 
-typedef Result = {
+typedef DungeonResult = {
     exp:Parameter,
     battles:Array<BattleResult>,
     depth:Int,
+}
+
+typedef DungeonEnemy = {
+    color  : Color,
+    plan   : Plan,
+    effort : Parameter,
+    skills : Array<Skill>,
+}
+
+typedef DungeonLot = {
+    enemies : Array<DungeonEnemy>,
+    rate    : Int,
 }
 
 class MonkeyAI implements Engine.Request {

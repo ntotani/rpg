@@ -14,7 +14,7 @@ class Hero {
     var hp       : Int;
     var skills   : Array<Skill>;
 
-    public function new(id:String, color:Color, plan:Plan, talent:Parameter, effort:Parameter, hp:Int, skills:Array<Skill>) {
+    public function new(id:String, color:Color, plan:Plan, talent:Parameter, effort:Parameter, skills:Array<Skill>) {
         if (validateTalent(talent)) {
             throw HeroError.INVALID_TALENT;
         }
@@ -26,7 +26,7 @@ class Hero {
         this.plan = plan;
         this.talent = talent;
         this.effort = effort;
-        this.hp = hp;
+        this.hp = this.getParameter().health;
         this.skills = skills;
     }
 
@@ -77,6 +77,19 @@ class Hero {
     public static function calcLevel(effort:Parameter):Int {
         var sum:Int = effort.attack + effort.block + effort.speed + effort.health;
         return Std.int(Math.sqrt(sum) * 9 / 16) + 1;
+    }
+
+    public function recoverAllHp():Void {
+        this.hp = this.getParameter().health;
+    }
+    
+    public static function generateTalent():Parameter {
+        return {
+            attack : (Rand.next() % MAX_TALENT) + 1,
+            block  : (Rand.next() % MAX_TALENT) + 1,
+            speed  : (Rand.next() % MAX_TALENT) + 1,
+            health : (Rand.next() % MAX_TALENT) + 1,
+        }
     }
 
 }
