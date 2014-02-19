@@ -32,3 +32,19 @@ enum SkillType {
 enum SkillEffect {
     ATTACK;
 }
+
+class Skills {
+
+    public static function targetValueOf(str:String):SkillTarget {
+        return Type.createEnum(SkillTarget, str);
+    }
+
+    public static function typeValueOf(str:String):SkillType {
+        return Type.createEnum(SkillType, str);
+    }
+
+    public static function effectValueOf(str:String):SkillEffect {
+        return Type.createEnum(SkillEffect, str);
+    }
+
+}
