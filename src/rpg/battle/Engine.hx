@@ -128,9 +128,13 @@ class Engine {
     }
 
     public static function calcDamage(actor:BattleHero, target:BattleHero, skill:Skill):Int {
-        var attack:Int = actor.getHero().getParameter().attack;
-        var block:Int = target.getHero().getParameter().block;
-        return Std.int(skill.power * actor.getHero().getLevel() / 10 * attack / block + 1);
+        var attack = actor.getHero().getParameter().attack;
+        var block = target.getHero().getParameter().block;
+        var damage = skill.power * attack / block;
+        damage *= actor.getHero().getLevel() / 10;
+        damage *= (85 + Rand.next() % 16) / 100;
+        damage *= Color.Colors.rate(skill.color, target.getHero().getColor());
+        return Std.int(damage) + 1;
     }
     
     public function isFinish():Bool {

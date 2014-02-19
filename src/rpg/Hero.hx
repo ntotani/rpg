@@ -55,6 +55,7 @@ class Hero {
     public function getSkill(idx:Int):Skill { return this.skills[idx]; }
     public function getSkillNum() { return this.skills.length; }
     public function getEffort() { return this.effort; };
+    public function getColor() { return this.color; }
 
     public function getParameter():Parameter {
         var level:Int = getLevel();
