@@ -154,7 +154,7 @@ class HeroTest {
     public static function createHero(talent:Parameter, effort:Parameter):Hero {
         var id:String = Std.string(heroId++);
         var skills:Array<Skill> = [createSkill()];
-        return new Hero(id, Color.SUN, Plan.MONKEY, talent, effort, skills);
+        return new Hero(id, id, Color.SUN, Plan.MONKEY, talent, effort, skills);
     }
     
     public static function createSkill():Skill {

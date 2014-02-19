@@ -7,6 +7,7 @@ class Hero {
     public static var EFFORT_SUM_LIMIT : Int = 256;
 
     var id       : String;
+    var name     : String;
     var color    : Color;
     var plan     : Plan;
     var talent   : Parameter;
@@ -14,7 +15,7 @@ class Hero {
     var hp       : Int;
     var skills   : Array<Skill>;
 
-    public function new(id:String, color:Color, plan:Plan, talent:Parameter, effort:Parameter, skills:Array<Skill>) {
+    public function new(id:String, name:String, color:Color, plan:Plan, talent:Parameter, effort:Parameter, skills:Array<Skill>) {
         if (validateTalent(talent)) {
             throw HeroError.INVALID_TALENT;
         }
@@ -22,6 +23,7 @@ class Hero {
             throw HeroError.INVALID_EFFORT;
         }
         this.id = id;
+        this.name = name;
         this.color = color;
         this.plan = plan;
         this.talent = talent;

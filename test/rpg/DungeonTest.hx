@@ -9,7 +9,7 @@ class DungeonTest {
     @Test
     public function testSpawnEnemies():Void {
         var dungeon = createEasyDungeon(1);
-        var enemies = dungeon.spawnEnemies();
+        var enemies = dungeon.toHeros(dungeon.spawnEnemies());
         Assert.isTrue(enemies[0].getHp() > 0);
     }
 
@@ -48,13 +48,13 @@ class DungeonTest {
     function createDungeon(depth, effort):Dungeon {
         var s = [HeroTest.createSkill()];
         var enemies:Array<Dungeon.DungeonEnemy> = [
-            {color:Color.SUN, plan:Plan.MONKEY, effort:effort, skills:s}
+            {name:'_RAND_', color:Color.SUN, plan:Plan.MONKEY, effort:effort, skills:s}
         ];
         var lot:Dungeon.DungeonLot = {
             enemies:enemies,
             rate:100,
         };
-        return new Dungeon(depth, [lot], enemies);
+        return new Dungeon(depth, [lot], ['enemy'], enemies);
     }
     
     function isWin(result:BattleResult):Bool {

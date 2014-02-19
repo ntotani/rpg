@@ -7,11 +7,13 @@ class Dungeon {
 
     var depth        : Int;
     var lotteryTable : Array<DungeonLot>;
+    var nameTable    : Array<String>;
     var boss         : Array<DungeonEnemy>;
 
-    public function new(depth, lotteryTable, boss) {
+    public function new(depth, lotteryTable, nameTable, boss) {
         this.depth = depth;
         this.lotteryTable = lotteryTable;
+        this.nameTable = nameTable;
         this.boss = boss;
     }
 
@@ -22,7 +24,7 @@ class Dungeon {
         var id2hero = new Map<String, Hero>();
         for (e in heros) { id2hero.set(e.getId(), e); }
         for (i in 0...depth) {
-            var enemies = this.spawnEnemies();
+            var enemies = this.toHeros((i + 1) == depth ? this.boss : this.spawnEnemies());
             var engine = new Engine(heros, enemies);
             var friendAgent = new MonkeyAI(engine, 0);
             var enemyAgent = new MonkeyAI(engine, 1);
@@ -44,19 +46,24 @@ class Dungeon {
         return result;
     }
 
-    public function spawnEnemies():Array<Hero> {
+    public function spawnEnemies():Array<DungeonEnemy> {
         var rateSum = Lambda.fold(this.lotteryTable, function(e, p) {
             return p + e.rate;
         }, 0);
         var pivot = Rand.next() % rateSum;
         for (lot in this.lotteryTable) {
             if (lot.rate > pivot) {
-                return Lambda.array(Lambda.mapi(lot.enemies, function(i, e) {
-                    return new Hero('enemy' + i, e.color, e.plan, Hero.generateTalent(), e.effort, e.skills);
-                }));
+                return lot.enemies;
             }
         }
         throw 'invalid table';
+    }
+
+    public function toHeros(enemies:Array<DungeonEnemy>):Array<Hero> {
+        return Lambda.array(Lambda.mapi(enemies, function(i, e) {
+            var name = e.name == '_RAND_' ? this.nameTable[Rand.next() % this.nameTable.length] : e.name;
+            return new Hero('enemy' + i, name, e.color, e.plan, Hero.generateTalent(), e.effort, e.skills);
+        }));
     }
 
 }
@@ -66,6 +73,7 @@ typedef DungeonResult = {
 }
 
 typedef DungeonEnemy = {
+    name   : String,
     color  : Color,
     plan   : Plan,
     effort : Parameter,
