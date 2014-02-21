@@ -66,8 +66,10 @@ class Engine {
             var events:Array<Action> = [];
             var turn:Turn = this.applyNewTurn();
             for (id in this.solveOrder(this.requests)) {
-                var event:Action = this.action(commands.get(id));
-                this.applyAction(event);
+                if (commands.exists(id)) {
+                    var event:Action = this.action(commands.get(id));
+                    this.applyAction(event);
+                }
             }
             var requests:Array<Request> = this.requests;
             this.requests = [];

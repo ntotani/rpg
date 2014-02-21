@@ -120,6 +120,14 @@ class EngineTest {
         Assert.areEqual(Std.string(result1), Std.string(result2));
     }
 
+    @Test
+    public function testExecuteLessCommands():Void {
+        var engine:Engine = this.createEngine();
+        engine.execute(new RequestImpl([{actor:0, target:1, skill:0}]));
+        engine.execute(new RequestImpl([]));
+        Assert.isTrue(engine.getHero(1).getHp() < engine.getHero(1).getHero().getParameter().health);
+    }
+
     function createEngine():Engine {
         var red:Hero = HeroTest.createMaxHero();
         var blue:Hero = HeroTest.createMinHero();
