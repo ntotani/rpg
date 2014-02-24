@@ -17,25 +17,45 @@ class DungeonTest {
     public function testSolveAuto():Void {
         var dungeon = createEasyDungeon(1);
         var hero:Hero = HeroTest.createMaxHero();
-        var result:Dungeon.DungeonResult = dungeon.solveAuto([hero]);
+        var result:Dungeon.DungeonResult = dungeon.solveAuto([hero], 1);
         Assert.isTrue(hero.getHp() < hero.getParameter().health);
         Assert.isTrue(isWin(result.battles[0]));
+    }
+
+    @Test
+    public function testSolveAutoStop():Void {
+        var dungeon = createEasyDungeon(2);
+        var hero:Hero = HeroTest.createMaxHero();
+        var result:Dungeon.DungeonResult = dungeon.solveAuto([hero], 1);
+        Assert.areEqual(1, result.battles.length);
     }
 
     @Test
     public function testSolveAutoFail():Void {
         var dungeon = createExtreamDungeon(2);
         var hero:Hero = HeroTest.createMinHero();
-        var result:Dungeon.DungeonResult = dungeon.solveAuto([hero]);
+        var result:Dungeon.DungeonResult = dungeon.solveAuto([hero], 2);
         Assert.areEqual(1, result.battles.length);
         Assert.isFalse(isWin(result.battles[0]));
     }
 
-    function createEasyDungeon(depth):Dungeon {
+    @Test
+    public function testSolveAutoCallback():Void {
+        var dungeon = createEasyDungeon(1);
+        var hero:Hero = HeroTest.createMaxHero();
+        var called = false;
+        dungeon.solveAuto([hero], 1, function(engine:Engine) {
+            called = true;
+            Assert.isTrue(engine.isWin(0));
+        });
+        Assert.isTrue(called);
+    }
+
+    public static function createEasyDungeon(depth):Dungeon {
         return createDungeon(depth, {attack:0, block:0, speed:0, health:0});
     }
 
-    function createExtreamDungeon(depth):Dungeon {
+    public static function createExtreamDungeon(depth):Dungeon {
         var max:Parameter = {
             attack:Hero.EFFORT_LIMIT,
             block:0,
@@ -45,7 +65,7 @@ class DungeonTest {
         return createDungeon(depth, max);
     }
 
-    function createDungeon(depth, effort):Dungeon {
+    static function createDungeon(depth, effort):Dungeon {
         var s = [HeroTest.createSkill()];
         var enemies:Array<Dungeon.DungeonEnemy> = [
             {name:'_RAND_', color:Color.SUN, plan:Plan.MONKEY, effort:effort, skills:s}
@@ -54,7 +74,7 @@ class DungeonTest {
             enemies:enemies,
             rate:100,
         };
-        return new Dungeon(depth, [lot], ['enemy'], enemies);
+        return new Dungeon('', '', depth, '', '', [lot], ['enemy'], enemies);
     }
     
     function isWin(result:BattleResult):Bool {

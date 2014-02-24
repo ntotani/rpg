@@ -5,19 +5,27 @@ import rpg.battle.Result;
 
 class Dungeon {
 
+    var name         : String;
+    var desc         : String;
     var depth        : Int;
+    var preDepth     : String;
+    var postDepth    : String;
     var lotteryTable : Array<DungeonLot>;
     var nameTable    : Array<String>;
     var boss         : Array<DungeonEnemy>;
 
-    public function new(depth, lotteryTable, nameTable, boss) {
+    public function new(name, desc, depth, preDepth, postDepth, lotteryTable, nameTable, boss) {
+        this.name = name;
+        this.desc = desc;
         this.depth = depth;
+        this.preDepth = preDepth;
+        this.postDepth = postDepth;
         this.lotteryTable = lotteryTable;
         this.nameTable = nameTable;
         this.boss = boss;
     }
 
-    public function solveAuto(heros:Array<Hero>):DungeonResult {
+    public function solveAuto(heros:Array<Hero>, targetDepth:Int, ?onBattle:Engine->Void):DungeonResult {
         var result:DungeonResult = {
             battles: [],
         };
@@ -38,8 +46,9 @@ class Dungeon {
                     id2hero.get(id).setHp(e.getHp());
                 }
             }
+            if (onBattle != null) { onBattle(engine); }
             result.battles.push(engine.getResult());
-            if (!engine.isWin(0)) {
+            if (!engine.isWin(0) || result.battles.length >= targetDepth) {
                 break;
             }
         }
