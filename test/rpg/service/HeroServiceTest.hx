@@ -33,10 +33,10 @@ class HeroServiceTest {
     public function testGetAll():Void {
         var storage = new StorageImpl();
         var heros = HeroService.getAll(storage);
-        var storedHeros = storage.get(HeroService.HEROS_KEY);
-        for (hero in heros) {
+        var storedHeros = storage.getAll();
+        for (stored in storedHeros) {
+            var hero = heros.get(stored.id);
             Assert.areEqual(0, hero.getEffort().attack);
-            var stored = storedHeros.get(hero.getId());
             Assert.areEqual(0, stored.effort.attack);
         }
     }
@@ -44,32 +44,61 @@ class HeroServiceTest {
     @Test
     public function testGetAllExist():Void {
         var hero = HeroTest.createMaxHero();
-        var storedHeros = new StringMap<HeroService.StoredHero>();
-        storedHeros.set(hero.getId(), HeroService.toStored(hero));
         var storage = new StorageImpl();
-        storage.set(HeroService.HEROS_KEY, storedHeros);
+        storage.setAll([HeroService.toStored(hero)]);
         var heros = HeroService.getAll(storage);
         for (actual in heros) {
             Assert.areEqual(hero.getId(), actual.getId());
         }
     }
 
+    @Test
+    public function testGetTeam():Void {
+        var storage = new StorageImpl();
+        var team = HeroService.getTeam(storage);
+        Assert.areEqual(1, team.length);
+        Assert.isNotNull(team[0]);
+        Assert.isNull(team[1]);
+    }
+
+    @Test
+    public function testGetTeamExist():Void {
+        var hero = HeroTest.createMaxHero();
+        var storage = new StorageImpl();
+        storage.setAll([HeroService.toStored(hero)]);
+        storage.setTeam([hero.getId()]);
+        var team = HeroService.getTeam(storage);
+        Assert.areEqual(1, team.length);
+        Assert.areEqual(hero.getId(), team[0].getId());
+        Assert.isNull(team[1]);
+    }
+
 }
 
-class StorageImpl implements Storage {
+class StorageImpl implements HeroService.HeroStorage {
 
-    var storage:StringMap<Dynamic>;
+    var storage:Array<HeroService.StoredHero>;
+    var team:Array<String>;
 
     public function new() {
-        storage = new StringMap<Dynamic>();
+        storage = [];
+        team = [];
     }
 
-    public function get(key:String):Dynamic {
-        return storage.get(key);
+    public function getAll():Array<HeroService.StoredHero> {
+        return storage;
     }
 
-    public function set(key:String, value:Dynamic) {
-        storage.set(key, value);
+    public function setAll(heros:Array<HeroService.StoredHero>) {
+        storage = heros;
+    }
+
+    public function getTeam():Array<String> {
+        return team;
+    }
+
+    public function setTeam(team:Array<String>) {
+        this.team = team;
     }
 
 }
