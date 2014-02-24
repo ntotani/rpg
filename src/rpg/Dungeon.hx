@@ -62,7 +62,7 @@ class Dungeon {
     public function toHeros(enemies:Array<DungeonEnemy>):Array<Hero> {
         return Lambda.array(Lambda.mapi(enemies, function(i, e) {
             var name = e.name == '_RAND_' ? this.nameTable[Rand.next() % this.nameTable.length] : e.name;
-            return new Hero('enemy' + i, name, e.color, e.plan, Hero.generateTalent(), e.effort, e.skills);
+            return new Hero('enemy' + i, name, e.color, e.plan, Hero.generateTalent(), e.effort, e.skills, 0);
         }));
     }
 

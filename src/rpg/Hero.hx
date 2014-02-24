@@ -14,8 +14,9 @@ class Hero {
     var effort   : Parameter;
     var hp       : Int;
     var skills   : Array<Skill>;
+    var returnAt : Int;
 
-    public function new(id:String, name:String, color:Color, plan:Plan, talent:Parameter, effort:Parameter, skills:Array<Skill>) {
+    public function new(id:String, name:String, color:Color, plan:Plan, talent:Parameter, effort:Parameter, skills:Array<Skill>, returnAt:Int) {
         if (validateTalent(talent)) {
             throw HeroError.INVALID_TALENT;
         }
@@ -30,6 +31,7 @@ class Hero {
         this.effort = effort;
         this.hp = this.getParameter().health;
         this.skills = skills;
+        this.returnAt = returnAt;
     }
 
     public static function validateTalent(talent:Parameter):Bool {
@@ -50,12 +52,17 @@ class Hero {
     }
 
     public function getId():String { return this.id; }
+    public function getName():String { return this.name; }
     public function getHp():Int { return this.hp; }
     public function setHp(hp:Int):Void { this.hp = hp; }
+    public function getSkills() { return this.skills; }
     public function getSkill(idx:Int):Skill { return this.skills[idx]; }
     public function getSkillNum() { return this.skills.length; }
+    public function getTalent() { return this.talent; };
     public function getEffort() { return this.effort; };
     public function getColor() { return this.color; }
+    public function getPlan() { return this.plan; }
+    public function getReturnAt() { return this.returnAt; }
 
     public function getParameter():Parameter {
         var level:Int = getLevel();
