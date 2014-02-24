@@ -5,6 +5,7 @@ import haxe.ds.StringMap;
 class HeroService {
 
     public static var HERO_PER_TEAM = 4;
+    public static var MSEC_PER_RECOVER = 60000;
 
     public static function createInit():Hero {
         var id = generateId();
@@ -68,6 +69,11 @@ class HeroService {
     
     public static function generateId():String {
         return Std.string(Rand.next());
+    }
+
+    public static function calcCurrentHp(hero:Hero, now:Int):Int {
+        var hp = hero.getHp() + (now - hero.getReturnAt()) / MSEC_PER_RECOVER;
+        return Std.int(Math.min(hp, hero.getParameter().health));
     }
 
 }

@@ -73,6 +73,15 @@ class HeroServiceTest {
         Assert.isNull(team[1]);
     }
 
+    @Test
+    public function testCalcCurrentHp():Void {
+        var hero = HeroTest.createMaxHero();
+        hero.setHp(0);
+        var sec = DateTools.seconds(HeroService.MSEC_PER_RECOVER / 1000);
+        var hp = HeroService.calcCurrentHp(hero, Std.int(sec));
+        Assert.areEqual(1, hp);
+    }
+
 }
 
 class StorageImpl implements HeroService.HeroStorage {

@@ -63,6 +63,7 @@ class Hero {
     public function getColor() { return this.color; }
     public function getPlan() { return this.plan; }
     public function getReturnAt() { return this.returnAt; }
+    public function setReturnAt(returnAt:Int) { this.returnAt = returnAt; }
 
     public function getParameter():Parameter {
         var level:Int = getLevel();
