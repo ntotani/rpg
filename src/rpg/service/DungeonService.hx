@@ -68,7 +68,7 @@ class DungeonService {
                     storage.setProgress(dungeon.getId() + 1);
                     if (isAreaGoal(dungeon)) {
                         var bossTeam = result.battles[result.battles.length - 1].teamBlue;
-                        var boss = bossTeam[bossTeam.length - 1];
+                        var boss = bossTeam[0];
                         boss.recoverAllHp();
                         team.push(boss);
                     }
