@@ -43,16 +43,20 @@ class DungeonTest {
 
     @Test
     public function testSolveAutoCallback():Void {
-        Rand.startDebug([0]);
+        //Rand.startDebug([0]);
+        for (i in [0...1000]) {
         var dungeon = createEasyDungeon(1);
         var hero:Hero = HeroTest.createMaxHero();
         var called = false;
         dungeon.solveAuto([hero], 1, function(engine:Engine) {
             called = true;
-            Assert.isTrue(engine.isWin(0));
+            var turns = engine.getResult().turns;
+            var turn = turns[turns.length - 1];
+            Assert.isTrue(engine.isWin(0) && turn[1].actor == 1);
         });
         Assert.isTrue(called);
-        Rand.endDebug();
+        }
+        //Rand.endDebug();
     }
 
     public static function createEasyDungeon(depth):Dungeon {
