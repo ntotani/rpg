@@ -45,6 +45,20 @@ class HeroService {
         }));
     }
 
+    public static function update(storage:HeroStorage, heros:Array<Hero>) {
+        var heroMap = new StringMap<Hero>();
+        for (hero in heros) {
+            heroMap.set(hero.getId(), hero);
+        }
+        var all = Lambda.array(Lambda.map(storage.getAll(), function(e) {
+            if (heroMap.exists(e.id)) {
+                return toStored(heroMap.get(e.id));
+            }
+            return e;
+        }));
+        storage.setAll(all);
+    }
+
     public static function toStored(hero:Hero):StoredHero {
         return {
             id       : hero.getId(),

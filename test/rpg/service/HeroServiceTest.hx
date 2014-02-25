@@ -82,6 +82,19 @@ class HeroServiceTest {
         Assert.areEqual(1, hp);
     }
 
+    @Test
+    public function testUpdate():Void {
+        var hero = HeroTest.createMinHero();
+        var storage = new StorageImpl();
+        storage.setAll([HeroService.toStored(hero)]);
+        hero.applyExp(Parameter.Parameters.ONE);
+        HeroService.update(storage, [hero]);
+        var heros = HeroService.getAll(storage);
+        for (actual in heros) {
+            Assert.areEqual(1, actual.getEffort().attack);
+        }
+    }
+
 }
 
 class StorageImpl implements HeroService.HeroStorage {
