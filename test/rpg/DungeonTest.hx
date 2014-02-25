@@ -15,11 +15,13 @@ class DungeonTest {
 
     @Test
     public function testSolveAuto():Void {
+        Rand.startDebug([0]);
         var dungeon = createEasyDungeon(1);
         var hero:Hero = HeroTest.createMaxHero();
         var result:Dungeon.DungeonResult = dungeon.solveAuto([hero], 1);
         Assert.isTrue(hero.getHp() < hero.getParameter().health);
         Assert.isTrue(isWin(result.battles[0]));
+        Rand.endDebug();
     }
 
     @Test
@@ -41,6 +43,7 @@ class DungeonTest {
 
     @Test
     public function testSolveAutoCallback():Void {
+        Rand.startDebug([0]);
         var dungeon = createEasyDungeon(1);
         var hero:Hero = HeroTest.createMaxHero();
         var called = false;
@@ -49,6 +52,7 @@ class DungeonTest {
             Assert.isTrue(engine.isWin(0));
         });
         Assert.isTrue(called);
+        Rand.endDebug();
     }
 
     public static function createEasyDungeon(depth):Dungeon {

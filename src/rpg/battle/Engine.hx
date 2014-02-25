@@ -85,6 +85,9 @@ class Engine {
         allHeros.sort(function(a, b) {
             var aSpeed:Int = a.getHero().getParameter().speed;
             var bSpeed:Int = b.getHero().getParameter().speed;
+            if (aSpeed == bSpeed) {
+                return Rand.next() % 2 == 0 ? 1 : -1;
+            }
             return bSpeed - aSpeed;
         });
         var order:Array<Int> = [];

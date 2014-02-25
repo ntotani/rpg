@@ -20,6 +20,17 @@ class EngineTest {
         var order:Array<Int> = engine.solveOrder([]);
         Assert.areEqual([0, 1].toString(), order.toString());
     }
+
+    @Test
+    public function testSolveOrderSameSpeed():Void {
+        Rand.startDebug([0]);
+        var red = HeroTest.createMinHero();
+        var blue = HeroTest.createMinHero();
+        var engine = new Engine([red], [blue]);
+        var order:Array<Int> = engine.solveOrder([]);
+        Assert.areEqual([1, 0].toString(), order.toString());
+        Rand.endDebug();
+    }
     
     @Test
     public function testCalcDamage():Void {
