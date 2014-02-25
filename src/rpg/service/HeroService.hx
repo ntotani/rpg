@@ -46,17 +46,14 @@ class HeroService {
     }
 
     public static function update(storage:Storage, heros:Array<Hero>) {
-        var heroMap = new StringMap<Hero>();
-        for (hero in heros) {
-            heroMap.set(hero.getId(), hero);
+        var heroMap = new StringMap<StoredHero>();
+        for (hero in storage.getHeros()) {
+            heroMap.set(hero.id, hero);
         }
-        var all = Lambda.array(Lambda.map(storage.getHeros(), function(e) {
-            if (heroMap.exists(e.id)) {
-                return toStored(heroMap.get(e.id));
-            }
-            return e;
-        }));
-        storage.setHeros(all);
+        for (hero in heros) {
+            heroMap.set(hero.getId(), toStored(hero));
+        }
+        storage.setHeros(Lambda.array(heroMap));
     }
 
     public static function toStored(hero:Hero):StoredHero {

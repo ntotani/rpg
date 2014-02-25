@@ -10,4 +10,6 @@ interface Storage {
     function setTeam(team:Array<String>):Void;
     function getLatestDungeonResult():StoredDungeonResult;
     function setDungeonResult(now:Int, result:StoredDungeonResult):Void;
+    function getProgress():Int;
+    function setProgress(progress:Int):Void;
 }

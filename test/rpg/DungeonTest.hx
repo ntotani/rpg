@@ -74,7 +74,7 @@ class DungeonTest {
             enemies:enemies,
             rate:100,
         };
-        return new Dungeon('', '', depth, '', '', [lot], ['enemy'], enemies);
+        return new Dungeon(1, 1, '', '', depth, '', '', [lot], ['enemy'], enemies);
     }
     
     function isWin(result:BattleResult):Bool {

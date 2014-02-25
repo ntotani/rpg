@@ -5,6 +5,8 @@ import rpg.battle.Result;
 
 class Dungeon {
 
+    var id           : Int;
+    var area         : Int;
     var name         : String;
     var desc         : String;
     var depth        : Int;
@@ -14,7 +16,9 @@ class Dungeon {
     var nameTable    : Array<String>;
     var boss         : Array<DungeonEnemy>;
 
-    public function new(name, desc, depth, preDepth, postDepth, lotteryTable, nameTable, boss) {
+    public function new(id, area, name, desc, depth, preDepth, postDepth, lotteryTable, nameTable, boss) {
+        this.id = id;
+        this.area = area;
         this.name = name;
         this.desc = desc;
         this.depth = depth;
@@ -24,6 +28,10 @@ class Dungeon {
         this.nameTable = nameTable;
         this.boss = boss;
     }
+
+    public function getId():Int { return id; }
+    public function getArea():Int { return area; }
+    public function getDepth():Int { return depth; }
 
     public function solveAuto(heros:Array<Hero>, targetDepth:Int, ?onBattle:Engine->Void):DungeonResult {
         var result:DungeonResult = {

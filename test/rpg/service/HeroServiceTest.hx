@@ -95,4 +95,15 @@ class HeroServiceTest {
         }
     }
 
+    @Test
+    public function testUpdateAdd():Void {
+        var hero = HeroTest.createMinHero();
+        var addHero = HeroTest.createMinHero();
+        var storage = new StorageImpl();
+        storage.setHeros([HeroService.toStored(hero)]);
+        HeroService.update(storage, [hero, addHero]);
+        var heros = HeroService.getAll(storage);
+        Assert.areEqual(2, Lambda.array(heros).length);
+    }
+
 }

@@ -8,7 +8,7 @@ class DungeonService {
 
     public static function get(id:Int):Dungeon {
         var dungeon = master.get(id);
-        return new Dungeon(dungeon.name, dungeon.desc, dungeon.depth, dungeon.preDepth, dungeon.postDepth, Lambda.array(Lambda.map(dungeon.lotteryTable, function(e) {
+        return new Dungeon(dungeon.id, dungeon.area, dungeon.name, dungeon.desc, dungeon.depth, dungeon.preDepth, dungeon.postDepth, Lambda.array(Lambda.map(dungeon.lotteryTable, function(e) {
             return {
                 enemies : Lambda.array(Lambda.map(e.enemies, fromStored)),
                 rate    : e.rate,
@@ -21,26 +21,31 @@ class DungeonService {
     }
 
     public static function commit(storage:Storage, now:Int, dungeon:Dungeon, depth:Int) {
+        var progress = storage.getProgress();
+        if (progress < dungeon.getId()) {
+            throw DungeonError.INVALID_PROGRESS;
+        }
         var team = HeroService.getTeam(storage);
         for (hero in team) {
-            hero.setHp(HeroService.calcCurrentHp(hero, now));
+            var hp = HeroService.calcCurrentHp(hero, now);
+            if (hp < 1) {
+                throw DungeonError.INVALID_TEAM;
+            }
+            hero.setHp(hp);
         }
         var exp = Parameter.Parameters.ZERO;
+        var clearDepth = 0;
         var result = dungeon.solveAuto(team, depth, function(engine) {
             if (!engine.isWin(0)) {
                 return;
             }
+            clearDepth++;
             var battleResult = engine.getResult();
             for (enemy in battleResult.teamBlue) {
                 exp = Parameter.Parameters.sum(exp, enemy.calcExp());
             }
         });
-        for (hero in team) {
-            if (hero.getHp() > 0) {
-                hero.applyExp(exp);
-            }
-        }
-        HeroService.update(storage, team);
+
         var storedResult = {
             battles:Lambda.array(Lambda.map(result.battles, function(e) {
                 return {
@@ -51,6 +56,26 @@ class DungeonService {
             })),
         }
         storage.setDungeonResult(now, storedResult);
+
+        if (clearDepth >= Math.min(depth, dungeon.getDepth())) {
+            for (hero in team) {
+                if (hero.getHp() > 0) {
+                    hero.applyExp(exp);
+                }
+            }
+            if (clearDepth >= dungeon.getDepth()) {
+                if (dungeon.getId() >= progress) {
+                    storage.setProgress(dungeon.getId() + 1);
+                    var bossTeam = result.battles[result.battles.length - 1].teamBlue;
+                    var boss = bossTeam[bossTeam.length - 1];
+                    boss.recoverAllHp();
+                    team.push(boss);
+                } else {
+                    // clear dungeon already cleared
+                }
+            }
+        }
+        HeroService.update(storage, team);
     }
 
     public static function getLatestResult(storage:Storage):Dungeon.DungeonResult {
@@ -78,6 +103,15 @@ class DungeonService {
         }
     }
 
+    public static function isAreaGoal(dungeon:Dungeon):Bool {
+        for (e in master) {
+            if (e.area == dungeon.getArea() && e.id > dungeon.getId()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
 
 typedef StoredDungeonResult = {
@@ -91,6 +125,8 @@ typedef StoredBattleResult = {
 }
 
 typedef StoredDungeon = {
+    id           : Int,
+    area         : Int,
     name         : String,
     desc         : String,
     depth        : Int,
@@ -112,4 +148,9 @@ typedef StoredEnemy = {
     plan   : String,
     effort : Parameter,
     skills : Array<Int>,
+}
+
+enum DungeonError {
+    INVALID_PROGRESS;
+    INVALID_TEAM;
 }

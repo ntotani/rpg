@@ -10,12 +10,14 @@ class StorageImpl implements Storage {
     var team:Array<String>;
     var dungeonResults:IntMap<StoredDungeonResult>;
     var latest:Int;
+    var progress:Int;
 
     public function new() {
         heros = [];
         team = [];
         dungeonResults = new IntMap<StoredDungeonResult>();
         latest = 0;
+        progress = 1;
     }
 
     public function getHeros():Array<StoredHero> {
@@ -41,6 +43,14 @@ class StorageImpl implements Storage {
     public function setDungeonResult(now:Int, result:StoredDungeonResult) {
         dungeonResults.set(now, result);
         latest = now;
+    }
+
+    public function getProgress():Int {
+        return progress;
+    }
+
+    public function setProgress(progress:Int) {
+        this.progress = progress;
     }
 
 }
