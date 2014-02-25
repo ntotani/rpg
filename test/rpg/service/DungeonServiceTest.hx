@@ -63,15 +63,15 @@ class DungeonServiceTest {
     public function testCommit():Void {
         Rand.startDebug([0]);
         var storage = new StorageImpl();
-        var now = 0;
+        var now = 60;
         var dungeon = DungeonService.get(1);
-        var depth = 1;
-        DungeonService.commit(storage, now, dungeon, depth);
+        DungeonService.commit(storage, now, dungeon, 1);
         var heros = HeroService.getAll(storage);
         Assert.areEqual(1, Lambda.array(heros).length);
         for (hero in heros) {
-            Assert.isTrue(0 < hero.getEffort().health);
+            Assert.isTrue(hero.getEffort().health > 0);
             Assert.isTrue(hero.getHp() < hero.getParameter().health);
+            Assert.areEqual(now, hero.getReturnAt());
         }
         var result = DungeonService.getLatestResult(storage);
         for (hero in result.battles[0].teamRed) {

@@ -73,7 +73,7 @@ class HeroService {
     }
     
     public static function fromStored(stored:StoredHero):Hero {
-        var hero = new Hero(stored.id, stored.name, Color.Colors.valueOf(stored.color), Plan.Plans.valueOf(stored.plan), stored.talent, stored.effort, Lambda.array(Lambda.map(stored.skills, function(e) { return SkillService.get(e); })), 0);
+        var hero = new Hero(stored.id, stored.name, Color.Colors.valueOf(stored.color), Plan.Plans.valueOf(stored.plan), stored.talent, stored.effort, Lambda.array(Lambda.map(stored.skills, function(e) { return SkillService.get(e); })), stored.returnAt);
         hero.setHp(stored.hp);
         return hero;
     }

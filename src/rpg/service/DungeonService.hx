@@ -66,14 +66,19 @@ class DungeonService {
             if (clearDepth >= dungeon.getDepth()) {
                 if (dungeon.getId() >= progress) {
                     storage.setProgress(dungeon.getId() + 1);
-                    var bossTeam = result.battles[result.battles.length - 1].teamBlue;
-                    var boss = bossTeam[bossTeam.length - 1];
-                    boss.recoverAllHp();
-                    team.push(boss);
+                    if (isAreaGoal(dungeon)) {
+                        var bossTeam = result.battles[result.battles.length - 1].teamBlue;
+                        var boss = bossTeam[bossTeam.length - 1];
+                        boss.recoverAllHp();
+                        team.push(boss);
+                    }
                 } else {
                     // clear dungeon already cleared
                 }
             }
+        }
+        for (hero in team) {
+            hero.setReturnAt(now);
         }
         HeroService.update(storage, team);
     }

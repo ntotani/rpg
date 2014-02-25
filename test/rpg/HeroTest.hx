@@ -160,6 +160,8 @@ class HeroTest {
     public static function createSkill():Skill {
         return {
             id:1,
+            name:'',
+            desc:'',
             color:Color.SUN,
             type:Skill.SkillType.ATTACK,
             target:Skill.SkillTarget.ENEMY,
