@@ -15,12 +15,12 @@ class HeroService {
         return new Hero(id, 'ハルヒロ', Color.FIRE, Plan.MONKEY, talent, effort, [skill], 0);
     }
 
-    public static function getAll(storage:HeroStorage):StringMap<Hero> {
-        var storedHeros = storage.getAll();
+    public static function getAll(storage:Storage):StringMap<Hero> {
+        var storedHeros = storage.getHeros();
         if (storedHeros.length == 0) {
             var hero = createInit();
             storedHeros = [toStored(hero)];
-            storage.setAll(storedHeros);
+            storage.setHeros(storedHeros);
         }
         var heros = new StringMap<Hero>();
         for (stored in storedHeros) {
@@ -29,7 +29,7 @@ class HeroService {
         return heros;
     }
 
-    public static function getTeam(storage:HeroStorage):Array<Hero> {
+    public static function getTeam(storage:Storage):Array<Hero> {
         var heros = getAll(storage);
         var team = storage.getTeam();
         if (team.length < 1) {
@@ -45,18 +45,18 @@ class HeroService {
         }));
     }
 
-    public static function update(storage:HeroStorage, heros:Array<Hero>) {
+    public static function update(storage:Storage, heros:Array<Hero>) {
         var heroMap = new StringMap<Hero>();
         for (hero in heros) {
             heroMap.set(hero.getId(), hero);
         }
-        var all = Lambda.array(Lambda.map(storage.getAll(), function(e) {
+        var all = Lambda.array(Lambda.map(storage.getHeros(), function(e) {
             if (heroMap.exists(e.id)) {
                 return toStored(heroMap.get(e.id));
             }
             return e;
         }));
-        storage.setAll(all);
+        storage.setHeros(all);
     }
 
     public static function toStored(hero:Hero):StoredHero {
@@ -102,11 +102,4 @@ typedef StoredHero = {
     hp       : Int,
     skills   : Array<Int>,
     returnAt : Int,
-}
-
-interface HeroStorage {
-    function getAll():Array<StoredHero>;
-    function setAll(heros:Array<StoredHero>):Void;
-    function getTeam():Array<String>;
-    function setTeam(team:Array<String>):Void;
 }

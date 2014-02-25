@@ -20,8 +20,8 @@ class DungeonService {
         master.set(id, dungeon);
     }
 
-    public static function commit(dungeonStorage:DungeonStorage, heroStorage:HeroService.HeroStorage, now:Int, dungeon:Dungeon, depth:Int) {
-        var team = HeroService.getTeam(heroStorage);
+    public static function commit(storage:Storage, now:Int, dungeon:Dungeon, depth:Int) {
+        var team = HeroService.getTeam(storage);
         for (hero in team) {
             hero.setHp(HeroService.calcCurrentHp(hero, now));
         }
@@ -40,7 +40,7 @@ class DungeonService {
                 hero.applyExp(exp);
             }
         }
-        HeroService.update(heroStorage, team);
+        HeroService.update(storage, team);
         var storedResult = {
             battles:Lambda.array(Lambda.map(result.battles, function(e) {
                 return {
@@ -50,11 +50,11 @@ class DungeonService {
                 }
             })),
         }
-        dungeonStorage.setResult(now, storedResult);
+        storage.setDungeonResult(now, storedResult);
     }
 
-    public static function getLatestResult(storage:DungeonStorage):Dungeon.DungeonResult {
-        var storedResult = storage.getLatest();
+    public static function getLatestResult(storage:Storage):Dungeon.DungeonResult {
+        var storedResult = storage.getLatestDungeonResult();
         return {
             battles:Lambda.array(Lambda.map(storedResult.battles, function(e) {
                 return {
@@ -78,11 +78,6 @@ class DungeonService {
         }
     }
 
-}
-
-interface DungeonStorage {
-    function setResult(now:Int, result:StoredDungeonResult):Void;
-    function getLatest():StoredDungeonResult;
 }
 
 typedef StoredDungeonResult = {

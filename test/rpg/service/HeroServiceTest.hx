@@ -33,7 +33,7 @@ class HeroServiceTest {
     public function testGetAll():Void {
         var storage = new StorageImpl();
         var heros = HeroService.getAll(storage);
-        var storedHeros = storage.getAll();
+        var storedHeros = storage.getHeros();
         for (stored in storedHeros) {
             var hero = heros.get(stored.id);
             Assert.areEqual(0, hero.getEffort().attack);
@@ -45,7 +45,7 @@ class HeroServiceTest {
     public function testGetAllExist():Void {
         var hero = HeroTest.createMaxHero();
         var storage = new StorageImpl();
-        storage.setAll([HeroService.toStored(hero)]);
+        storage.setHeros([HeroService.toStored(hero)]);
         var heros = HeroService.getAll(storage);
         for (actual in heros) {
             Assert.areEqual(hero.getId(), actual.getId());
@@ -65,7 +65,7 @@ class HeroServiceTest {
     public function testGetTeamExist():Void {
         var hero = HeroTest.createMaxHero();
         var storage = new StorageImpl();
-        storage.setAll([HeroService.toStored(hero)]);
+        storage.setHeros([HeroService.toStored(hero)]);
         storage.setTeam([hero.getId()]);
         var team = HeroService.getTeam(storage);
         Assert.areEqual(1, team.length);
@@ -86,41 +86,13 @@ class HeroServiceTest {
     public function testUpdate():Void {
         var hero = HeroTest.createMinHero();
         var storage = new StorageImpl();
-        storage.setAll([HeroService.toStored(hero)]);
+        storage.setHeros([HeroService.toStored(hero)]);
         hero.applyExp(Parameter.Parameters.ONE);
         HeroService.update(storage, [hero]);
         var heros = HeroService.getAll(storage);
         for (actual in heros) {
             Assert.areEqual(1, actual.getEffort().attack);
         }
-    }
-
-}
-
-class StorageImpl implements HeroService.HeroStorage {
-
-    var storage:Array<HeroService.StoredHero>;
-    var team:Array<String>;
-
-    public function new() {
-        storage = [];
-        team = [];
-    }
-
-    public function getAll():Array<HeroService.StoredHero> {
-        return storage;
-    }
-
-    public function setAll(heros:Array<HeroService.StoredHero>) {
-        storage = heros;
-    }
-
-    public function getTeam():Array<String> {
-        return team;
-    }
-
-    public function setTeam(team:Array<String>) {
-        this.team = team;
     }
 
 }
