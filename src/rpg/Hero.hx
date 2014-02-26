@@ -52,6 +52,7 @@ class Hero {
     }
 
     public function getId():String { return this.id; }
+    public function setId(id:String):Void { this.id = id; }
     public function getName():String { return this.name; }
     public function getHp():Int { return this.hp; }
     public function setHp(hp:Int):Void { this.hp = hp; }

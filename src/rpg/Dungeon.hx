@@ -36,11 +36,12 @@ class Dungeon {
     public function solveAuto(heros:Array<Hero>, targetDepth:Int, ?onBattle:Engine->Void):DungeonResult {
         var result:DungeonResult = {
             battles: [],
+            join:'',
         };
         var id2hero = new Map<String, Hero>();
         for (e in heros) { id2hero.set(e.getId(), e); }
         for (i in 0...depth) {
-            var enemies = this.toHeros((i + 1) == depth ? this.boss : this.spawnEnemies());
+            var enemies = this.toHeros((i + 1) == depth ? this.boss : this.spawnEnemies(), i + 1);
             var engine = new Engine(heros, enemies);
             var friendAgent = new MonkeyAI(engine, 0);
             var enemyAgent = new MonkeyAI(engine, 1);
@@ -76,10 +77,10 @@ class Dungeon {
         throw 'invalid table';
     }
 
-    public function toHeros(enemies:Array<DungeonEnemy>):Array<Hero> {
+    public function toHeros(enemies:Array<DungeonEnemy>, depth:Int):Array<Hero> {
         return Lambda.array(Lambda.mapi(enemies, function(i, e) {
             var name = e.name == '_RAND_' ? this.nameTable[Rand.next() % this.nameTable.length] : e.name;
-            return new Hero('enemy' + i, name, e.color, e.plan, Hero.generateTalent(), e.effort, e.skills, 0);
+            return new Hero('enemy_${depth}_${i}', name, e.color, e.plan, Hero.generateTalent(), e.effort, e.skills, 0);
         }));
     }
 
@@ -87,6 +88,7 @@ class Dungeon {
 
 typedef DungeonResult = {
     battles:Array<BattleResult>,
+    join:String,
 }
 
 typedef DungeonEnemy = {

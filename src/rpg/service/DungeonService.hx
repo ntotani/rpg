@@ -54,8 +54,8 @@ class DungeonService {
                     turns: e.turns,
                 }
             })),
+            join : result.join,
         }
-        storage.setDungeonResult(now, storedResult);
 
         if (clearDepth >= Math.min(depth, dungeon.getDepth())) {
             for (hero in team) {
@@ -69,6 +69,8 @@ class DungeonService {
                     if (isAreaGoal(dungeon)) {
                         var bossTeam = result.battles[result.battles.length - 1].teamBlue;
                         var boss = bossTeam[0];
+                        storedResult.join = boss.getId();
+                        boss.setId(HeroService.generateId());
                         boss.recoverAllHp();
                         team.push(boss);
                     }
@@ -81,6 +83,7 @@ class DungeonService {
             hero.setReturnAt(now);
         }
         HeroService.update(storage, team);
+        storage.setDungeonResult(now, storedResult);
     }
 
     public static function getLatestResult(storage:Storage):Dungeon.DungeonResult {
@@ -93,6 +96,7 @@ class DungeonService {
                     turns: e.turns,
                 }
             })),
+            join: storedResult.join,
         };
     }
 
@@ -121,6 +125,7 @@ class DungeonService {
 
 typedef StoredDungeonResult = {
     battles : Array<StoredBattleResult>,
+    join    : String,
 }
 
 typedef StoredBattleResult = {

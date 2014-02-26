@@ -9,7 +9,7 @@ class DungeonTest {
     @Test
     public function testSpawnEnemies():Void {
         var dungeon = createEasyDungeon(1);
-        var enemies = dungeon.toHeros(dungeon.spawnEnemies());
+        var enemies = dungeon.toHeros(dungeon.spawnEnemies(), 1);
         Assert.isTrue(enemies[0].getHp() > 0);
     }
 
