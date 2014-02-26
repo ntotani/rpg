@@ -25,7 +25,9 @@ class DungeonService {
         if (progress < dungeon.getId()) {
             throw DungeonError.INVALID_PROGRESS;
         }
-        var team = HeroService.getTeam(storage);
+        var team = Lambda.array(Lambda.filter(HeroService.getTeam(storage), function(e) {
+            return e != null;
+        }));
         for (hero in team) {
             var hp = HeroService.calcCurrentHp(hero, now);
             if (hp < 1) {

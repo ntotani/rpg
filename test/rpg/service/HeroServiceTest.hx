@@ -7,7 +7,9 @@ class HeroServiceTest {
 
     @BeforeClass
     public function beforeClass() {
+        Rand.endDebug();
         SkillService.set(1, HeroTest.createSkill());
+        SkillService.set(2, HeroTest.createSkill());
     }
 
     @Test
@@ -26,13 +28,15 @@ class HeroServiceTest {
     @Test
     public function testCreateInit():Void {
         var hero = HeroService.createInit();
-        Assert.areEqual(0, hero.getEffort().attack);
+        Assert.areEqual(4, hero.length);
+        Assert.areEqual(0, hero[0].getEffort().attack);
     }
 
     @Test
     public function testGetAll():Void {
         var storage = new StorageImpl();
         var heros = HeroService.getAll(storage);
+        Assert.areEqual(4, Lambda.array(heros).length);
         var storedHeros = storage.getHeros();
         for (stored in storedHeros) {
             var hero = heros.get(stored.id);
@@ -56,9 +60,8 @@ class HeroServiceTest {
     public function testGetTeam():Void {
         var storage = new StorageImpl();
         var team = HeroService.getTeam(storage);
-        Assert.areEqual(1, team.length);
+        Assert.areEqual(4, team.length);
         Assert.isNotNull(team[0]);
-        Assert.isNull(team[1]);
     }
 
     @Test
@@ -68,7 +71,7 @@ class HeroServiceTest {
         storage.setHeros([HeroService.toStored(hero)]);
         storage.setTeam([hero.getId()]);
         var team = HeroService.getTeam(storage);
-        Assert.areEqual(1, team.length);
+        Assert.areEqual(4, team.length);
         Assert.areEqual(hero.getId(), team[0].getId());
         Assert.isNull(team[1]);
     }

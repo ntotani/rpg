@@ -8,6 +8,7 @@ class DungeonServiceTest {
     @BeforeClass
     public function beforeClass() {
         SkillService.set(1, HeroTest.createSkill());
+        SkillService.set(2, HeroTest.createSkill());
         var enemy = {
             name   : '',
             color  : 'SUN',
@@ -61,15 +62,13 @@ class DungeonServiceTest {
 
     @Test
     public function testCommit():Void {
-        Rand.startDebug([0]);
         var storage = new StorageImpl();
         var now = 60;
         var dungeon = DungeonService.get(1);
         DungeonService.commit(storage, now, dungeon, 1);
         var heros = HeroService.getAll(storage);
-        Assert.areEqual(1, Lambda.array(heros).length);
+        Assert.areEqual(4, Lambda.array(heros).length);
         for (hero in heros) {
-            Assert.isTrue(hero.getEffort().health > 0);
             Assert.isTrue(hero.getHp() < hero.getParameter().health);
             Assert.areEqual(now, hero.getReturnAt());
         }
@@ -77,7 +76,6 @@ class DungeonServiceTest {
         for (hero in result.battles[0].teamRed) {
             Assert.areEqual(hero.getParameter().health, hero.getHp());
         }
-        Rand.endDebug();
     }
 
     @Test

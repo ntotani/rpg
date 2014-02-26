@@ -7,19 +7,26 @@ class HeroService {
     public static var HERO_PER_TEAM = 4;
     public static var MSEC_PER_RECOVER = 60000;
 
-    public static function createInit():Hero {
-        var id = generateId();
-        var talent = {attack:7, block:7, speed:16, health:7};
-        var effort = Parameter.Parameters.ZERO;
-        var skill = SkillService.get(1);
-        return new Hero(id, 'ハルヒロ', Color.FIRE, Plan.MONKEY, talent, effort, [skill], 0);
+    public static function createInit():Array<Hero> {
+        var names = ['ファイア案件', 'レッドオーシャン', '氷河期', 'ブルー'];
+        var colors = [Color.FIRE, Color.FIRE, Color.WATER, Color.WATER];
+        var skills = [1, 1, 2, 2];
+        var heros = [];
+        for (i in 0...HERO_PER_TEAM) {
+            var id = generateId();
+            var talent = Hero.generateTalent();
+            var effort = Parameter.Parameters.ZERO;
+            var skill = SkillService.get(skills[i]);
+            heros.push(new Hero(id, names[i], colors[i], Plan.MONKEY, talent, effort, [skill], 0));
+        }
+        return heros;
     }
 
     public static function getAll(storage:Storage):StringMap<Hero> {
         var storedHeros = storage.getHeros();
         if (storedHeros.length == 0) {
-            var hero = createInit();
-            storedHeros = [toStored(hero)];
+            var inits = Lambda.map(createInit(), toStored);
+            storedHeros = Lambda.array(inits);
             storage.setHeros(storedHeros);
         }
         var heros = new StringMap<Hero>();
@@ -31,18 +38,21 @@ class HeroService {
 
     public static function getTeam(storage:Storage):Array<Hero> {
         var heros = getAll(storage);
-        var team = storage.getTeam();
-        if (team.length < 1) {
-            team = Lambda.array(Lambda.map(heros, function(e) {
+        var storedTeam = storage.getTeam();
+        if (storedTeam.length < 1) {
+            storedTeam = Lambda.array(Lambda.map(heros, function(e) {
                 return e.getId();
             }));
         }
-        return Lambda.array(Lambda.mapi([0...HERO_PER_TEAM], function(i, e) {
-            if (team.length <= i) {
-                return null;
+        var team = [];
+        for (i in 0...HERO_PER_TEAM) {
+            if (storedTeam.length <= i) {
+                team.push(null);
+            } else {
+                team.push(heros.get(storedTeam[i]));
             }
-            return heros.get(team[i]);
-        }));
+        }
+        return team;
     }
 
     public static function update(storage:Storage, heros:Array<Hero>) {
