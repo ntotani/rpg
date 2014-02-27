@@ -9,8 +9,8 @@ typedef Parameter = {
 
 class Parameters {
 
-    public static var ZERO = {attack:0, block:0, speed:0, health:0};
-    public static var ONE = {attack:1, block:1, speed:1, health:1};
+    public static function zero():Parameter { return {attack:0, block:0, speed:0, health:0}; }
+    public static function one():Parameter { return {attack:1, block:1, speed:1, health:1}; }
 
     public static function sum(a:Parameter, b:Parameter):Parameter {
         return {

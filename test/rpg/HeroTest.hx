@@ -126,6 +126,22 @@ class HeroTest {
     }
 
     @Test
+    public function testApplyEffortRecoverHp() {
+        var hero = createMinHero();
+        hero.setHp(0);
+        hero.applyExp({attack:4, block:0, speed:0, health:0});
+        Assert.areEqual(hero.getParameter().health, hero.getHp());
+    }
+
+    @Test
+    public function testApplyEffortNotRecoverHp() {
+        var hero = createMinHero();
+        hero.setHp(0);
+        hero.applyExp({attack:1, block:0, speed:0, health:0});
+        Assert.areEqual(0, hero.getHp());
+    }
+
+    @Test
     public function testCalcExp() {
         var hero = createMinHero();
         var expected = {attack:0, block:0, speed:0, health:1};

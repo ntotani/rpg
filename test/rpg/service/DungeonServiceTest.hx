@@ -13,7 +13,7 @@ class DungeonServiceTest {
             name   : '',
             color  : 'SUN',
             plan   : 'MONKEY',
-            effort : Parameter.Parameters.ZERO,
+            effort : Parameter.Parameters.zero(),
             skills : [1],
         }
         DungeonService.set(1, {
@@ -69,7 +69,7 @@ class DungeonServiceTest {
         var heros = HeroService.getAll(storage);
         Assert.areEqual(4, Lambda.array(heros).length);
         for (hero in heros) {
-            Assert.isTrue(hero.getHp() < hero.getParameter().health);
+            Assert.isTrue(hero.getHp() <= hero.getParameter().health);
             Assert.areEqual(now, hero.getReturnAt());
         }
         var result = DungeonService.getLatestResult(storage);

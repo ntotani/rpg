@@ -90,7 +90,7 @@ class HeroServiceTest {
         var hero = HeroTest.createMinHero();
         var storage = new StorageImpl();
         storage.setHeros([HeroService.toStored(hero)]);
-        hero.applyExp(Parameter.Parameters.ONE);
+        hero.applyExp(Parameter.Parameters.one());
         HeroService.update(storage, [hero]);
         var heros = HeroService.getAll(storage);
         for (actual in heros) {

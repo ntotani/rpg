@@ -106,11 +106,15 @@ class Hero {
         }
     }
 
-    public function applyExp(effort:Parameter) {
-        this.effort.attack += trimEffort(this.effort.attack, effort.attack);
-        this.effort.block += trimEffort(this.effort.block, effort.block);
-        this.effort.speed += trimEffort(this.effort.speed, effort.speed);
-        this.effort.health += trimEffort(this.effort.health, effort.health);
+    public function applyExp(exp:Parameter) {
+        var prevLevel = getLevel();
+        effort.attack += trimEffort(effort.attack, exp.attack);
+        effort.block += trimEffort(effort.block, exp.block);
+        effort.speed += trimEffort(effort.speed, exp.speed);
+        effort.health += trimEffort(effort.health, exp.health);
+        if (getLevel() > prevLevel) {
+            recoverAllHp();
+        }
     }
 
     function trimEffort(base:Int, gain:Int):Int {

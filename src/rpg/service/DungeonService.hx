@@ -35,7 +35,7 @@ class DungeonService {
             }
             hero.setHp(hp);
         }
-        var exp = Parameter.Parameters.ZERO;
+        var exp = Parameter.Parameters.zero();
         var clearDepth = 0;
         var result = dungeon.solveAuto(team, depth, function(engine) {
             if (!engine.isWin(0)) {

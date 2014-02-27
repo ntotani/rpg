@@ -15,7 +15,7 @@ class HeroService {
         for (i in 0...HERO_PER_TEAM) {
             var id = generateId();
             var talent = Hero.generateTalent();
-            var effort = Parameter.Parameters.ZERO;
+            var effort = Parameter.Parameters.zero();
             var skill = SkillService.get(skills[i]);
             heros.push(new Hero(id, names[i], colors[i], Plan.MONKEY, talent, effort, [skill], 0));
         }
