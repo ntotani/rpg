@@ -146,6 +146,9 @@ class HeroTest {
         var hero = createMinHero();
         var expected = {attack:0, block:0, speed:0, health:1};
         Assert.areEqual(Std.string(expected), Std.string(hero.calcExp()));
+        var water = new Hero('', '', Color.WATER, Plan.MONKEY, Parameter.Parameters.one(), Parameter.Parameters.zero(), [createSkill()], 0);
+        var expected = {attack:1, block:0, speed:0, health:0};
+        Assert.areEqual(Std.string(expected), Std.string(water.calcExp()));
     }
 
     public static function createMinHero():Hero {

@@ -127,14 +127,11 @@ class Hero {
         var exp = {attack:0, block:0, speed:0, health:0};
         var val = this.getLevel();
         switch(this.color) {
-            case FIRE:
-            case WATER:
-            case TREE:
+            case FIRE, WATER, TREE:
                 exp.attack = val;
             case EARTH:
                 exp.block = val;
-            case MOON:
-            case GOLD:
+            case MOON, GOLD:
                 exp.speed = val;
             case SUN:
                 exp.health = val;
