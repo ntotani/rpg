@@ -35,6 +35,7 @@ class Dungeon {
 
     public function solveAuto(heros:Array<Hero>, targetDepth:Int, ?onBattle:Engine->Void):DungeonResult {
         var result:DungeonResult = {
+            dungeonId: this.id,
             battles: [],
             join:'',
         };
@@ -87,6 +88,7 @@ class Dungeon {
 }
 
 typedef DungeonResult = {
+    dungeonId:Int,
     battles:Array<BattleResult>,
     join:String,
 }

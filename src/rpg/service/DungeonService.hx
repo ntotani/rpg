@@ -49,6 +49,7 @@ class DungeonService {
         });
 
         var storedResult = {
+            dungeonId: dungeon.getId(),
             battles:Lambda.array(Lambda.map(result.battles, function(e) {
                 return {
                     teamRed: Lambda.array(Lambda.map(e.teamRed, HeroService.toStored)),
@@ -91,6 +92,7 @@ class DungeonService {
     public static function getLatestResult(storage:Storage):Dungeon.DungeonResult {
         var storedResult = storage.getLatestDungeonResult();
         return {
+            dungeonId: storedResult.dungeonId,
             battles:Lambda.array(Lambda.map(storedResult.battles, function(e) {
                 return {
                     teamRed: Lambda.array(Lambda.map(e.teamRed, HeroService.fromStored)),
@@ -126,6 +128,7 @@ class DungeonService {
 }
 
 typedef StoredDungeonResult = {
+    dungeonId: Int,
     battles : Array<StoredBattleResult>,
     join    : String,
 }

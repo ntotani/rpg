@@ -73,6 +73,7 @@ class DungeonServiceTest {
             Assert.areEqual(now, hero.getReturnAt());
         }
         var result = DungeonService.getLatestResult(storage);
+        Assert.areEqual(1, result.dungeonId);
         for (hero in result.battles[0].teamRed) {
             Assert.areEqual(hero.getParameter().health, hero.getHp());
         }
