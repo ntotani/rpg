@@ -74,6 +74,7 @@ class Dungeon {
             if (lot.rate > pivot) {
                 return lot.enemies;
             }
+            pivot -= lot.rate;
         }
         throw 'invalid table';
     }
