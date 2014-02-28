@@ -8,7 +8,7 @@ class HeroService {
     public static var MSEC_PER_RECOVER = 60000;
 
     public static function createInit():Array<Hero> {
-        var names = ['ファイア案件', 'レッドオーシャン', '氷河期', 'ブルー'];
+        var names = ['ファイア案件', 'レッドオーシャン', '氷河期', 'ブルーフェイス'];
         var colors = [Color.FIRE, Color.FIRE, Color.WATER, Color.WATER];
         var skills = [1, 1, 2, 2];
         var heros = [];
